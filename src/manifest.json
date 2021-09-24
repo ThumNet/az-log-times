@@ -1,0 +1,16 @@
+{
+    "name": "Azure log times",
+    "description": "Helper to view timings of azure devops logs",
+    "version": "1.0",
+    "manifest_version": 3,
+    "content_scripts": [
+        {
+          "matches": ["https://dev.azure.com/*"],
+          "js": ["js/contentScript.js"],
+          "css": ["css/style.css"]
+        }
+      ],
+    "permissions": [
+        "activeTab"
+    ]
+}

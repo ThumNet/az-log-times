@@ -1,0 +1,5 @@
+.logentry {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    font-family: monospace;
+}
