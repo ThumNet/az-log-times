@@ -1,5 +1,87 @@
-.logentry {
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+
+.box {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+  }
+
+  /* .box .row {
+    border: 1px dotted grey;
+  } */
+  
+  .box .row.header {
+    flex: 0 1 auto;
+    /* The above is shorthand for:
+    flex-grow: 0,
+    flex-shrink: 1,
+    flex-basis: auto
+    */
+  }
+  
+  .box .row.content {
+    border-top: 1px solid grey;
+    border-bottom: 1px solid grey;
+    display: flex;
+    flex-flow: column;
+    flex: 1 1 auto;
+    overflow-y: auto;
+  }
+  
+  .box .row.footer {
+    flex: 0 1 40px;
+  }
+
+.entries {
+}
+
+.logentry, .total {
     word-wrap: break-word;
     white-space: pre-wrap;
     font-family: monospace;
+}
+
+.logentry .duration {
+    display: inline-block;
+    right: 0;
+    top: 0;
+    background-color: lightcoral;
+    color: white;
+    visibility: hidden;
+    border-radius: 3px;
+    padding: 0 3px;
+    margin-left: 10px;
+}
+
+.highlight .duration,
+.logentry:hover .duration {
+    visibility: visible;
+}
+
+.highlight {
+    background-color: lemonchiffon;
+}
+
+.timeline {
+    height: 2rem;
+    width: 100%;
+}
+
+.timeline div {
+    height: 100%;
+    float: left;
+    box-shadow: -1px 0px 0px 0px grey inset; /* right border that doesn't effect width*/
+}
+
+.timeline div:hover {
+    background-color: lavender;
+}
+
+.total {
+    text-align: right;
 }
