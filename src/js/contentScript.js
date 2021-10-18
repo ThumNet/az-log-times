@@ -36,7 +36,7 @@ function createEntryElement(entry, index) {
   return div;
 }
 
-function renderEntries(entries) {
+function renderEntries(entries, parentElm) {
   const entriesElm = document.createElement('div');
   entriesElm.className = 'entries';
 
@@ -44,7 +44,7 @@ function renderEntries(entries) {
     entriesElm.appendChild(createEntryElement(entry, ix));
   });
 
-  return entriesElm;
+  parentElm.appendChild(entriesElm);
 }
 
 function highlightEntry(ev) {
@@ -56,8 +56,17 @@ function highlightEntry(ev) {
   }
 }
 
+function calcIndicator(total, maxItems) {
+  let sizes = [500000, 100000, 50000, 10000, 5000, 1000, 500, 100];
+  let x = 0;
+  while (x < sizes.length - 1 && (total / sizes[x+1] < maxItems)) {
+    x++;
+  }
+  return sizes[x];
+}
 
-function renderTimeline(entries, totalMs) {
+
+function renderTimeline(entries, totalMs, parentElm) {
   
   function map(value, valueRangeStart, valueRangeEnd, newRangeStart, newRangeEnd) {
     return newRangeStart + (newRangeEnd - newRangeStart) * ((value - valueRangeStart) / (valueRangeEnd - valueRangeStart));
@@ -75,20 +84,38 @@ function renderTimeline(entries, totalMs) {
     container.appendChild(e);
   });
 
-  return container;
+  // visual timeline indicators
+  // we want to see 5 indicators and the total on the right side
+  const indicators = document.createElement('div');
+  indicators.className = 'indicators';
+  const maxIndicators = 5;
+  const indictatorSize = calcIndicator(totalMs, maxIndicators);
+  for (let i=1; i<maxIndicators; i++) {
+    const indElm = createDiv('indicator');
+    indElm.style.width = map(indictatorSize, 0, totalMs, 0, 100) + '%';
+    indElm.innerHTML = (indictatorSize * i) + '&nbsp;';
+    indicators.appendChild(indElm);
+  }
+  const totalElm = document.createElement('div');
+  totalElm.className = 'indicator-total';
+  totalElm.style.width = map(totalMs - (indictatorSize * (maxIndicators -1)), 0, totalMs, 0, 100) + '%';
+  totalElm.innerText = `Total ${totalMs}ms`;
+  indicators.appendChild(totalElm);
+  
+  parentElm.appendChild(container);
+  parentElm.appendChild(indicators);
 }
 
-function renderTotals(totalMs) {
+function renderTotals(totalMs, parentElm) {
   const totalText = document.createElement('div');
   totalText.className = 'total'
   totalText.innerText = `Total duration: ${totalMs}ms`
-  return totalText;
+  parentElm.appendChild(totalText);
 }
 
-function createDiv(className, child) {
+function createDiv(className) {
   const row = document.createElement('div');
   row.className = className;
-  row.appendChild(child);
   return row;
 }
 
@@ -96,11 +123,16 @@ function render() {
   const entries = readLog();
   const totalMs = entries[entries.length-1].date - entries[0].date;
 
-  const box = document.createElement('div');
-  box.className = 'box';
-  box.appendChild(createDiv('row header', renderTimeline(entries, totalMs)));
-  box.appendChild(createDiv('row content', renderEntries(entries)));
-  box.appendChild(createDiv('row footer', renderTotals(totalMs)));
+  const box = createDiv('box');
+  const header = createDiv('row header');
+  const content = createDiv('row content');
+  const footer = createDiv('row footer');
+  renderTimeline(entries, totalMs, header);
+  renderEntries(entries, content);
+  renderTotals(totalMs, footer);
+  box.appendChild(header);
+  box.appendChild(content);
+  box.appendChild(footer);
   document.body.appendChild(box);  
   const preElm = document.getElementsByTagName('pre')[0];  
   preElm.style.display = 'none';

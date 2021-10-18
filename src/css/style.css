@@ -25,7 +25,7 @@ body {
   }
   
   .box .row.content {
-    border-top: 1px solid grey;
+    /* border-top: 1px solid grey; */
     border-bottom: 1px solid grey;
     display: flex;
     flex-flow: column;
@@ -36,9 +36,6 @@ body {
   .box .row.footer {
     flex: 0 1 40px;
   }
-
-.entries {
-}
 
 .logentry, .total {
     word-wrap: break-word;
@@ -70,17 +67,34 @@ body {
 .timeline {
     height: 2rem;
     width: 100%;
+    border-bottom: 1px solid grey;
 }
-
 .timeline div {
-    height: 100%;
-    float: left;
-    box-shadow: -1px 0px 0px 0px grey inset; /* right border that doesn't effect width*/
+  height: 100%;
+  float: left;
+  box-shadow: -1px 0px 0px 0px grey inset; /* right border that doesn't effect width*/
+}
+.timeline div:hover {
+  background-color: lavender;
 }
 
-.timeline div:hover {
-    background-color: lavender;
+.indicators  {
+  height: 12px;
+  width: 100%;
+  text-align: right;
+  font-family: Verdana, Geneva, Tahoma, sans-serif; 
+  font-size: 8pt; 
+  color: lightgrey;
 }
+.indicators div {
+  height: 100%;
+  float: left;
+  box-shadow: -1px 0px 0px 0px lightgrey inset; /* right border that doesn't effect width*/
+}
+.indicators .indicator-total {
+  box-shadow: none;
+}
+
 
 .total {
     text-align: right;
